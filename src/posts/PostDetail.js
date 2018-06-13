@@ -7,6 +7,12 @@ class PostDetail extends Component {
   }
   titleWasClicked (event) {
     event.preventDefault()
+    const {dataCallback} = this.props
+    // console.log(dataCallback)
+    if (dataCallback !== undefined) {
+      dataCallback('hello world!')
+    }
+    //
   }
   render () {
     const {post} = this.props
