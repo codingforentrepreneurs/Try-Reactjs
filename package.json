@@ -5,6 +5,7 @@
   "dependencies": {
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
+    "react-markdown": "^3.3.3",
     "react-youtube": "^7.6.0",
     "whatwg-fetch": "^2.0.4"
   },

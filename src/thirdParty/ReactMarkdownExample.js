@@ -1,9 +1,12 @@
 import React, { Component } from 'react'
+import ReactMarkdown from 'react-markdown'
 
 class ReactMarkdownExample extends Component {
   render () {
+    const {input} = this.props
+    const disallowed = ['image']
     return (
-      <h1>Hello World</h1>
+      <ReactMarkdown className='cfe-markdown' source={input} disallowedTypes={disallowed} />
     )
   }
 }
