@@ -8,9 +8,9 @@ class PostList extends Component {
     super(props)
     this.handleDataCallback = this.handleDataCallback.bind(this)
   }
-  handleDataCallback (txtMsg) {
+  handleDataCallback (postItem) {
     // alert(txtMsg)
-    // console.log(this)
+    console.log(postItem)
   }
   render () {
     return (
