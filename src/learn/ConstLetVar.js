@@ -8,7 +8,7 @@ class ConstLetVar extends Component {
       someVar = 'Hello there again.'
     }
 
-    var someVar2 = 'method'
+    // var someVar2 = 'method'
 
     console.log(someVar)
   }
