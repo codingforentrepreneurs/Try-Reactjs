@@ -8,6 +8,7 @@ class StaticRouteComp extends Component {
       <div>
         <h1>Content that doesn't change based on route.</h1>
         <Link className='some-link' to='/posts/dynamic/'>Dynamic Page</Link>
+
       </div>
     )
   }
