@@ -1,16 +1,39 @@
 import React, { Component } from 'react'
-// import PostList from './posts/PostList'
 
-import ReactMarkdownExample from './thirdParty/ReactMarkdownExample'
+import {BrowserRouter, Route, Switch, Redirect} from 'react-router-dom'
+
+import DynamicRouteComp from './routingComps/DynamicRouteComp'
+import StaticRouteComp from './routingComps/StaticRouteComp'
+import NotFound from './routingComps/NotFound'
 
 import './App.css'
 
 class App extends Component {
   render () {
-    const input = '<h1>Hello Wolrd</h1>\n\n # [This](http://joincfe.com/youtube/) is a header\n\nAnd this is a paragraph http://joincfe.com/youtube/'
+    const loggedIn = true
+    const supportsHistory = 'pushState' in window.history
     return (
-      <div className='App'>
-        <ReactMarkdownExample input={input} />
+      <div className='App' >
+        <nav className='navbar navbar-light bg-light'>
+          <a className='navbar-brand' href='/'>Navbar</a>
+        </nav>
+        <BrowserRouter forceRefresh={!supportsHistory}>
+          <Switch>
+            <Route exact path='/' component={StaticRouteComp} />
+            <Route exact path='/about' component={StaticRouteComp} />
+            <Route path='/posts/:slug' component={DynamicRouteComp} />
+            <Route component={NotFound} />
+
+            <Route exact path='/user' render={() => (
+              loggedIn === true ? (
+                <Redirect to='/posts/hello-there/' />
+              ) : (
+                <StaticRouteComp />
+              )
+            )} />
+
+          </Switch>
+        </BrowserRouter>
       </div>
     )
   }
