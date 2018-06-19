@@ -37,11 +37,20 @@ class PostDetail extends Component {
       showContent: !this.state.showContent
     })
   }
-  componentDidMount () {
+
+  setPostStateOnProps () {
     const {post} = this.props
     this.setState({
       postItem: post
     })
+  }
+  componentDidUpdate (prevProps, prevState, snapshop) {
+    if (this.props !== prevProps) {
+      this.setPostStateOnProps()
+    }
+  }
+  componentDidMount () {
+    this.setPostStateOnProps()
   }
   render () {
     const {postItem} = this.state
@@ -50,7 +59,9 @@ class PostDetail extends Component {
       <div>
         {postItem !== null
           ? <div>
-            <h1 onClick={this.titleWasClicked}>{postItem.title}</h1>
+            <h1 onClick={this.titleWasClicked}>{postItem.title} <small>
+              {postItem.date}
+            </small></h1>
             {showContent === true ? <p>{postItem.content}</p> : ''}
             <button onClick={this.toggleContent}>Toggle Content Display</button>
             <button onClick={this.handleRemoveContentButton}>Remove Content</button>
