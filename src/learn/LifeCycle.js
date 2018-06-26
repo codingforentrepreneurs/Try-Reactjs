@@ -20,6 +20,12 @@ class LifeCycle extends Component {
       loading: false
     })
   }
+
+  // componentWillUnmount () {
+  //   // unsubscribe from observables
+  //   // clear intervals
+  //   // log events
+  // }
 }
 
 export default LifeCycle
