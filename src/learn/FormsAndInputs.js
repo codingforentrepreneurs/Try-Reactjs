@@ -1,13 +1,26 @@
 import React, { Component } from 'react'
 
+function MyTextInput(props){
+    function handleChange(event){
+         if (props.onChange) props.onChange(event)  
+    }
+    return (
+         <p>
+             <input type='email' value={props.value} name={props.name} ref={props.inputRef} onChange={handleChange} />
+         </p>
+     )
+}
+
 class FormsAndInputs extends Component {
     constructor(props){
         super(props)
         this.state = {
             fullName: '',
-            content: ''
+            content: '',
+            email: ''
         }
         this.inputFullNameRef = React.createRef()
+        this.inputEmailRef = React.createRef()
     }
 
 
@@ -30,7 +43,7 @@ class FormsAndInputs extends Component {
 
     handleFocusClick = (event) => {
         event.preventDefault()
-            this.inputContentRef.focus()
+            this.inputEmailRef.current.focus()
     }
     handleClearClick = (event) => {
         event.preventDefault()
@@ -44,11 +57,13 @@ class FormsAndInputs extends Component {
     // }
   render () {
       const {fullName} = this.state
+      const {email} = this.state
     return (
       <div>
         <h1>Forms and Inputs</h1>
         <p>Full name is: {fullName}</p>
         <form onSubmit={this.handleSubmit}>
+            <MyTextInput inputRef={this.inputEmailRef} value={email} name='email'  onChange={this.handleInputChange}/>
           <p><input ref={this.inputFullNameRef} type='text' placeholder='Your Name' value={fullName} name='fullName' onChange={this.handleInputChange} /></p>
           <p><textarea ref={node => this.inputContentRef = node} placeholder='Your message' name='content' required={true} onChange={this.handleInputChange}></textarea></p>
           <p><button>Send Message</button></p>
