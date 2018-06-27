@@ -6,12 +6,14 @@ class FormsAndInputs extends Component {
         this.state = {
             fullName: ''
         }
+        this.inputFullNameRef = React.createRef()
     }
 
 
     handleSubmit = (event) => {
         event.preventDefault()
         const data = this.state
+        // console.log(this.inputFullNameRef.current.value)
         console.log("Final data is", data)
     }
 
@@ -25,10 +27,17 @@ class FormsAndInputs extends Component {
        })
     }
 
+    handleFocusClick = (event) => {
+            this.inputFullNameRef.current.focus()
+    }
+    handleClearClick = (event) => {
+            this.inputFullNameRef.current.value = ''
+            this.setState({
+                fullName: ''
+            })
+    }
     // componentDidMount(){
-    //     this.setState({
-    //        fullName: "Justin"
-    //    })
+    //     this.inputFullNameRef.current.focus()
     // }
   render () {
       const {fullName} = this.state
@@ -37,8 +46,10 @@ class FormsAndInputs extends Component {
         <h1>Forms and Inputs</h1>
         <p>Full name is: {fullName}</p>
         <form onSubmit={this.handleSubmit}>
-          <p><input type='text' placeholder='Your Name' value={fullName} name='fullName' onChange={this.handleInputChange} /></p>
+          <p><input ref={this.inputFullNameRef} type='text' placeholder='Your Name' value={fullName} name='fullName' onChange={this.handleInputChange} /></p>
           <p><button>Send Message</button></p>
+          <p><button onClick={this.handleFocusClick}>Focus</button></p>
+          <p><button onClick={this.handleClearClick}>Clear</button></p>
         </form>
       </div>
     )
