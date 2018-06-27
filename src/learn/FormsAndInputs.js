@@ -11,12 +11,42 @@ function MyTextInput(props){
      )
 }
 
+class MyInputBlock extends Component {
+    constructor(props){
+        super(props)
+        this.textInput = null
+        this.setTextInputRef = element => {
+            this.textInput = element
+        }
+        this.focusTextInput = () => {
+            if (this.textInput) this.textInput.focus()
+        }
+
+    }
+
+    handleChange = (event) =>{
+         if (this.props.onChange) this.props.onChange(event)  
+    }
+    componentDidMount(){
+        this.focusTextInput()
+    }
+
+    render() {
+        return (
+            <div>
+          <p><input ref={this.setTextInputRef} type='text' placeholder='Your Name'  name={this.props.inputFullName} onChange={this.handleChange}/></p>
+          <p><textarea placeholder='Your message' name={this.props.inputContentName}  onChange={this.handleChange}></textarea></p>
+          </div>
+      )
+    }
+}
+
 class FormsAndInputs extends Component {
     constructor(props){
         super(props)
         this.state = {
-            fullName: '',
-            content: '',
+            myFullName: '',
+            myContent: '',
             email: ''
         }
         this.inputFullNameRef = React.createRef()
@@ -49,23 +79,22 @@ class FormsAndInputs extends Component {
         event.preventDefault()
             this.inputFullNameRef.current.value = ''
             this.setState({
-                fullName: ''
+                myFullName: ''
             })
     }
     // componentDidMount(){
     //     this.inputFullNameRef.current.focus()
     // }
   render () {
-      const {fullName} = this.state
+      const {myFullName} = this.state
       const {email} = this.state
     return (
       <div>
         <h1>Forms and Inputs</h1>
-        <p>Full name is: {fullName}</p>
+        <p>Full name is: {myFullName}</p>
         <form onSubmit={this.handleSubmit}>
             <MyTextInput inputRef={this.inputEmailRef} value={email} name='email'  onChange={this.handleInputChange}/>
-          <p><input ref={this.inputFullNameRef} type='text' placeholder='Your Name' value={fullName} name='fullName' onChange={this.handleInputChange} /></p>
-          <p><textarea ref={node => this.inputContentRef = node} placeholder='Your message' name='content' required={true} onChange={this.handleInputChange}></textarea></p>
+            <MyInputBlock onChange={this.handleInputChange} inputFullName="myFullName" inputContentName='myContent'/>
           <p><button>Send Message</button></p>
           <p><button onClick={this.handleFocusClick}>Focus</button></p>
           <p><button onClick={this.handleClearClick}>Clear</button></p>
@@ -76,3 +105,6 @@ class FormsAndInputs extends Component {
 }
 
 export default FormsAndInputs
+
+// <p><input ref={this.inputFullNameRef} type='text' placeholder='Your Name' value={fullName} name='fullName' onChange={this.handleInputChange} /></p>
+//           <p><textarea ref={node => this.inputContentRef = node} placeholder='Your message' name='content' required={true} onChange={this.handleInputChange}></textarea></p>
