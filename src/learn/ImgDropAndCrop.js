@@ -4,6 +4,10 @@ import Dropzone from 'react-dropzone'
 import ReactCrop from 'react-image-crop'
 import './custom-image-crop.css';
 
+import {base64StringtoFile,
+    downloadBase64File,
+    extractImageFileExtensionFromBase64,
+    image64toCanvasRef} from './ResuableUtils'
 
 const imageMaxSize = 1000000000 // bytes
 const acceptedFileTypes = 'image/x-png, image/png, image/jpg, image/jpeg, image/gif'
@@ -11,8 +15,10 @@ const acceptedFileTypesArray = acceptedFileTypes.split(",").map((item) => {retur
 class ImgDropAndCrop extends Component {
     constructor(props){
         super(props)
+        this.imagePreviewCanvasRef = React.createRef()
         this.state = {
             imgSrc: null,
+            imgSrcExt: null,
             crop: {
                 aspect: 1/1
             }
@@ -49,9 +55,11 @@ class ImgDropAndCrop extends Component {
                  const currentFile = files[0]
                  const myFileItemReader = new FileReader()
                  myFileItemReader.addEventListener("load", ()=>{
-                     console.log(myFileItemReader.result)
+                     // console.log(myFileItemReader.result)
+                     const myResult = myFileItemReader.result
                      this.setState({
-                         imgSrc: myFileItemReader.result
+                         imgSrc: myResult,
+                         imgSrcExt: extractImageFileExtensionFromBase64(myResult)
                      })
                  }, false)
 
@@ -63,15 +71,56 @@ class ImgDropAndCrop extends Component {
 
 
     handleImageLoaded = (image) => {
-        console.log(image)
+        //console.log(image)
     }
     handleOnCropChange = (crop) => {
         this.setState({crop:crop})
     }
     handleOnCropComplete = (crop, pixelCrop) =>{
-        console.log(crop, pixelCrop)
+        //console.log(crop, pixelCrop)
+
+        const canvasRef = this.imagePreviewCanvasRef.current
+        const {imgSrc}  = this.state
+        image64toCanvasRef(canvasRef, imgSrc, pixelCrop)
+    }
+    handleDownloadClick = (event) => {
+        event.preventDefault()
+        const {imgSrc}  = this.state
+        if (imgSrc) {
+            const canvasRef = this.imagePreviewCanvasRef.current
+        
+            const {imgSrcExt} =  this.state
+            const imageData64 = canvasRef.toDataURL('image/' + imgSrcExt)
+
+      
+            const myFilename = "previewFile." + imgSrcExt
+
+            // file to be uploaded
+            const myNewCroppedFile = base64StringtoFile(imageData64, myFilename)
+            console.log(myNewCroppedFile)
+            // download file
+            downloadBase64File(imageData64, myFilename)
+            this.handleClearToDefault()
+        }
+        
+
     }
 
+    handleClearToDefault = event =>{
+        if (event) event.preventDefault()
+        const canvas = this.imagePreviewCanvasRef.current
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+        this.setState({
+            imgSrc: null,
+            imgSrcExt: null,
+            crop: {
+                aspect: 1/1
+            }
+
+        })
+    }
   render () {
       const {imgSrc} = this.state
     return (
@@ -87,6 +136,12 @@ class ImgDropAndCrop extends Component {
                      onImageLoaded={this.handleImageLoaded}
                      onComplete = {this.handleOnCropComplete}
                      onChange={this.handleOnCropChange}/>
+
+                  <br/>
+                  <p>Preview Canvas Crop </p>
+                  <canvas ref={this.imagePreviewCanvasRef}></canvas>
+                  <button onClick={this.handleDownloadClick}>Download</button>
+                  <button onClick={this.handleClearToDefault}>Clear</button>
               </div>
 
            : 
