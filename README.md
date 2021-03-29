@@ -1,3 +1,5 @@
+> Check out the updated version [here](https://github.com/codingforentrepreneurs/Try-React.js) and [here](https://www.codingforentrepreneurs.com/projects/try-reactjs-2021)
+
 # Try Reactjs
 Learn Reactjs bit by bit and subscribe to get everything on [joincfe.com/youtube/](http://joincfe.com/youtube/)
 
